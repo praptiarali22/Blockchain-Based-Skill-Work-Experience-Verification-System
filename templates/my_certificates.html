@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>My Certificates</title>
+    <script src="https://cdn.jsdelivr.net/npm/qrious/dist/qrious.min.js"></script>
+    <script src="{{ url_for('static', filename='js/wallet_connect.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/generate_qr.js') }}"></script>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .certificate-card {
+            border: 1px solid #ccc;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body>
+    <h1>🎓 My Verified Experience NFTs</h1>
+    <button onclick="connectWallet()">🔗 Connect Wallet</button>
+    <div id="certificates"></div>
+
+    <script>
+        async function fetchCertificates(wallet) {
+            const res = await fetch(`/my-certificates?wallet=${wallet}`);
+            const data = await res.json();
+            const container = document.getElementById('certificates');
+            container.innerHTML = "";
+
+            if (data.length === 0) {
+                container.innerHTML = "<p>No certificates found for this wallet.</p>";
+                return;
+            }
+
+            data.forEach(cert => {
+                const div = document.createElement("div");
+                div.className = "certificate-card";
+                div.innerHTML = `
+                    <h3>${cert.job_title}</h3>
+                    <p><strong>Company:</strong> ${cert.company}</p>
+                    <p><strong>From:</strong> ${cert.start_date} to ${cert.end_date}</p>
+                    <p><strong>Skills:</strong> ${cert.skills}</p>
+                    <p><strong>Rating:</strong> ${cert.performance_rating}</p>
+                    <a href="/certificate/${cert.token_id}">🔍 View Full Certificate</a><br><br>
+                    <canvas id="qr-${cert.token_id}"></canvas>
+                `;
+                container.appendChild(div);
+                generateQR(`qr-${cert.token_id}`, `/verify/${cert.token_id}`);
+            });
+        }
+
+        async function connectWallet() {
+            if (typeof window.ethereum !== 'undefined') {
+                try {
+                    const accounts = await ethereum.request({ method: 'eth_requestAccounts' });
+                    const wallet = accounts[0];
+                    await fetchCertificates(wallet);
+                } catch (err) {
+                    alert("Wallet connection failed!");
+                }
+            } else {
+                alert("MetaMask not installed");
+            }
+        }
+    </script>
+</body>
+</html>
