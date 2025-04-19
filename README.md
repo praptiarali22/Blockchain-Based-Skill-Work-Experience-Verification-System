@@ -9,7 +9,7 @@ This project is a **Blockchain-Based Skill and Work Experience Verification Syst
 - 🤖 **Smart Contracts:** Solidity-based smart contracts for automated verification processes.
 - 🔒 **Secure Back-End:** Python-powered backend for seamless integration and secure operations.
 - 💾 **Relational Database Support:** SQL is used for storing and managing data efficiently.
-- 📝 **Job Enrollment (Coming Soon):** Employees can enroll for jobs, and HR can verify submitted details.
+- 📝 **Job Enrollment :** Employees can enroll for jobs, and HR can verify submitted details.
 - 💬 **HR Messaging System:** HR can send messages directly to employees regarding verification updates.
 - 🏆 **Certificate Generation:** When an employee leaves a company, the HR can generate a blockchain-based certificate attesting to their skills and work experience. This certificate can be presented to other companies as proof of employment and can be verified by the new HR.
 
