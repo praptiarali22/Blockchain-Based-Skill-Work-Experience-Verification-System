@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Certificate System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='index.css') }}">
+</head>
+<body>
+    <h1>Welcome to the Certificate Management System</h1>
+
+    <div class="button-container">
+        <a href="{{ url_for('employee_signup') }}" class="button">Employee Signup</a>
+        <a href="{{ url_for('hr_signup') }}" class="button">HR Signup</a>
+        <a href="{{ url_for('login') }}" class="button">Login</a>
+    </div>
+</body>
+</html>

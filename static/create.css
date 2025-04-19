@@ -1,0 +1,102 @@
+/* Body Styles */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(to right, #d1c4e9, #ede7f6);
+    color: #4b0082;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+}
+
+/* Container for the form */
+.form-container {
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 8px 20px rgba(106, 13, 173, 0.2);
+    width: 100%;
+    max-width: 600px;
+    margin-top: 20px;
+    text-align: flex;
+}
+
+/* Header Styles */
+h1, h2 {
+    font-size: 2.5rem;
+    color: #6a0dad;
+}
+
+/* Form Styles */
+form {
+    width: 100%;
+    margin-top: 20px;
+}
+
+label {
+    font-size: 1.1rem;
+    color: #4b0082;
+}
+
+input[type="text"] {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    font-size: 1rem;
+}
+
+input[type="text"]:focus {
+    outline: none;
+    border-color: #7c30e2;
+}
+
+button[type="submit"] {
+    padding: 12px 20px;
+    background: linear-gradient(145deg, #7c30e2, #a66bff);
+    color: white;
+    font-weight: 600;
+    text-decoration: none;
+    border-radius: 8px;
+    text-align: center;
+    margin-top: 20px;
+    width: 100%;
+    box-shadow: 0 4px 12px rgba(106, 13, 173, 0.3);
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+button[type="submit"]:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 16px rgba(106, 13, 173, 0.5);
+    background: linear-gradient(145deg, #6a0dad, #8e44fd);
+}
+
+/* Back Button */
+a {
+    display: inline-block;
+    padding: 12px 20px;
+    background: linear-gradient(145deg, #7c30e2, #a66bff);
+    color: white;
+    font-weight: 600;
+    text-decoration: none;
+    border-radius: 8px;
+    margin-top: 20px;
+    text-align: center;
+    box-shadow: 0 4px 12px rgba(106, 13, 173, 0.3);
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+a:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 16px rgba(106, 13, 173, 0.5);
+    background: linear-gradient(145deg, #6a0dad, #8e44fd);
+}
+
+/* SweetAlert Custom Style */
+.swal2-popup {
+    font-size: 1rem;
+    padding: 20px;
+}

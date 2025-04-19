@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Create Certificate</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='create.css') }}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10.16.7/dist/sweetalert2.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> <!-- Include jQuery -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10.16.7/dist/sweetalert2.min.js"></script> <!-- Include SweetAlert -->
+</head>
+<body>
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <script>
+                $(document).ready(function() {
+                    // Use SweetAlert to show the popup message
+                    Swal.fire({
+                        title: "Notification",
+                        text: "{{ messages[0] }}",
+                        icon: "info",  // 'error', 'success', 'warning', etc.
+                        confirmButtonText: "OK"
+                    });
+                });
+            </script>
+        {% endif %}
+    {% endwith %}
+
+
+    <h2>Issue Certificate</h2>
+    <div class="form-container">
+    <form action="{{ url_for('create_certificate') }}" method="POST">
+        <label>Employee Name:</label><br>
+        <input type="text" name="employee_name" required><br><br>
+
+        <label>Job Role:</label><br>
+        <input type="text" name="job_role" required><br><br>
+
+        <label>Skills:</label><br>
+        <input type="text" name="skills" placeholder="Comma separated" required><br><br>
+
+        <label>Performance:</label><br>
+        <input type="text" name="performance" required><br><br>
+
+        <label>Employee Username:</label><br>
+        <input type="text" name="employee_username" required><br><br>
+
+        <button type="submit">Issue Certificate</button>
+    </form>
+    <div>
+    <br>
+    <a href="{{ url_for('hr_dashboard') }}">⬅ Back to Dashboard</a>
+</body>
+</html>
