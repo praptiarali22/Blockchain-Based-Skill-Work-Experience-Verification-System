@@ -12,10 +12,7 @@ This project is a **Blockchain-Based Skill and Work Experience Verification Syst
 - 📝 **Job Enrollment (Coming Soon):** Employees can enroll for jobs, and HR can verify submitted details.
 - 💬 **HR Messaging System:** HR can send messages directly to employees regarding verification updates.
 - 🏆 **Certificate Generation:** When an employee leaves a company, the HR can generate a blockchain-based certificate attesting to their skills and work experience. This certificate can be presented to other companies as proof of employment and can be verified by the new HR.
-- 🛠️ **Blockchain Tools Integration:**
-  - **MetaMask:** A browser extension for interacting with the Ethereum blockchain.
-  - **Ganache:** A personal blockchain for Ethereum development.
-  - **Remix IDE:** A powerful tool for writing, testing, and deploying smart contracts.
+
 
 ## 🛠️ Technology Stack
 The project uses the following technologies:
@@ -24,7 +21,7 @@ The project uses the following technologies:
 - **Blockchain:** Solidity (Smart Contracts)
 - **Database:** SQL
 - **Blockchain Tools:** MetaMask, Ganache, Remix IDE
-- **Additional Libraries/Tools:** Flask (or Django, if applicable), Web3.js (for blockchain interactions).
+- **Additional Libraries/Tools:** Flask , Web3.js (for blockchain interactions).
 
 ## 🧑‍💻 How It Works
 1. Users submit their skills, work experience, and supporting documents.
@@ -50,3 +47,5 @@ To set up the project locally:
 1. Clone the repository:
    ```bash
    git clone https://github.com/praptiarali22/Blockchain-Based-Skill-Work-Experience-Verification-System.git
+
+
