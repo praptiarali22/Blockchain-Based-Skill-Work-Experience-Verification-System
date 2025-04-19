@@ -1,0 +1,68 @@
+<!-- hr_dashboard.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HR View Certificate</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='view.css') }}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10.16.7/dist/sweetalert2.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> <!-- Include jQuery -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10.16.7/dist/sweetalert2.min.js"></script> <!-- Include SweetAlert -->
+</head>
+<body>
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <script>
+                $(document).ready(function() {
+                    // Use SweetAlert to show the popup message
+                    Swal.fire({
+                        title: "Notification",
+                        text: "{{ messages[0] }}",
+                        icon: "info",  // 'error', 'success', 'warning', etc.
+                        confirmButtonText: "OK"
+                    });
+                });
+            </script>
+        {% endif %}
+    {% endwith %}
+    <div class="container">
+    <h2>Issued Certificates</h2>
+
+    {% if certificates %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Certificate ID</th>
+                    <th>Employee Name</th>
+                    <th>Employee ID</th>
+                    <th>Company</th>
+                    <th>Job Role</th>
+                    <th>Skills</th>
+                    <th>Performance</th>
+                    <th>Issue Date</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for cert in certificates %}
+                    <tr>
+                        <td>{{ cert.cert_id }}</td>
+                        <td>{{ cert.employee_name }}</td>
+                        <td>{{ cert.employee_id }}</td>
+                        <td>{{ cert.company_name }}</td>
+                        <td>{{ cert.job_role }}</td>
+                        <td>{{ cert.skills }}</td>
+                        <td>{{ cert.performance }}</td>
+                        <td>{{ cert.issue_date }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>No certificates found for your company.</p>
+    {% endif %}
+    </div>
+    <br>
+        <a href="{{ url_for('hr_dashboard') }}" class="button">⬅ Back to Dashboard</a>
+</body>
+</html>

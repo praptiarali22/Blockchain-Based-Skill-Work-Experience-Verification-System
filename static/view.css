@@ -1,0 +1,90 @@
+/* General body styles */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(to right, #d1c4e9, #ede7f6);
+    color: #4b0082;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;  /* Align content at the top */
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+}
+
+/* Center the content */
+.container {
+    max-width: 900px;
+    margin-top: 40px;  /* Ensure the content doesn't touch the top edge */
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);  /* Slightly deeper shadow for better depth */
+    box-sizing: border-box;
+}
+
+/* Title */
+h1 {
+    text-align: center;
+    font-size: 28px;  /* Increase the font size for prominence */
+    color: #4C2D91;  /* Slightly more muted purple */
+    margin-bottom: 20px;
+    font-weight: 600;
+}
+
+/* Table styles */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+table th, table td {
+    padding: 14px;
+    text-align: left;
+    font-size: 16px;
+    border-bottom: 1px solid #ddd;  /* Adding a subtle border to separate rows */
+}
+
+table th {
+    background-color: #a66bff ;
+    color: white;
+    border-radius: 4px;
+}
+
+table tr:nth-child(even) {
+    background-color: #fafafa;  /* Lighter shade for alternating rows */
+}
+
+table tr:hover {
+    background-color: #f1f1f1;  /* Lighter hover effect */
+}
+
+.button {
+    padding: 12px 30px;
+    background: linear-gradient(145deg, #7c30e2, #a66bff);
+    color: white;
+    text-decoration: none;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 1.1rem;
+    transition: transform 0.3s, box-shadow 0.3s;
+    box-shadow: 0 4px 12px rgba(106, 13, 173, 0.3);
+    text-align: center;
+    width: 240px;
+}
+
+.button:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 16px rgba(106, 13, 173, 0.5);
+    background: linear-gradient(145deg, #6a0dad, #8e44fd);
+}
+
+
+/* No certificates found */
+.no-certificates {
+    text-align: center;
+    font-size: 18px;
+    color: #888;
+    margin-top: 20px;
+}

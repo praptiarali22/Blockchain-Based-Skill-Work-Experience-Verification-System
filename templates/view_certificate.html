@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>View Certificate</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='view.css') }}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10.16.7/dist/sweetalert2.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> <!-- Include jQuery -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10.16.7/dist/sweetalert2.min.js"></script> <!-- Include SweetAlert -->
+</head>
+<body>
+    <h1>Your Certificates</h1>
+    <div class="container">
+        
+        {% if certificates %}
+            <table>
+                <tr>
+                    <th>Certificate ID</th>
+                    <th>Employee Name</th>
+                    <th>Company Name</th>
+                    <th>Job Role</th>
+                    <th>Skills</th>
+                    <th>Performance</th>
+                    <th>Issued On</th>
+                </tr>
+                {% for cert in certificates %}
+                <tr>
+                    <td>{{ cert.cert_id }}</td>
+                    <td>{{ cert.employee_name }}</td>
+                    <td>{{ cert.company_name }}</td>
+                    <td>{{ cert.job_role }}</td>
+                    <td>{{ cert.skills }}</td>
+                    <td>{{ cert.performance }}</td>
+                    <td>{{ cert.issue_date }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        {% else %}
+            <p class="no-certificates">No certificates found.</p>
+        {% endif %}
+
+        <br>
+        <a href="{{ url_for('employee_dashboard') }}" class="button">⬅ Back to Dashboard</a>
+    </div>
+
+</body>
+</html>

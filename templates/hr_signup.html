@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HR Signup</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='signup-login.css') }}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10.16.7/dist/sweetalert2.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> <!-- Include jQuery -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10.16.7/dist/sweetalert2.min.js"></script> <!-- Include SweetAlert -->
+</head>
+<body>
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <script>
+                $(document).ready(function() {
+                    // Use SweetAlert to show the popup message
+                    Swal.fire({
+                        title: "Notification",
+                        text: "{{ messages[0] }}",
+                        icon: "info",  // 'error', 'success', 'warning', etc.
+                        confirmButtonText: "OK"
+                    });
+                });
+            </script>
+        {% endif %}
+    {% endwith %}
+
+    <h1>HR Signup</h1>
+    <form method="POST">
+        <input type="text" name="username" placeholder="Username" required><br>
+        <input type="password" name="password" placeholder="Password" required><br>
+        <input type="password" name="confirm_password" placeholder="Confirm Password" required><br>
+        <input type="text" name="company" placeholder="Company Name" required><br>
+        <input type="text" name="name" placeholder="Full Name" required><br>
+        <input type="email" name="email" placeholder="Email" required><br>
+        <button type="submit">Signup</button>
+    </form>
+    <p>Already have an account? <a href="{{ url_for('login') }}">Login</a></p>
+    {% if error %}
+        <p class="error">{{ error }}</p>
+    {% endif %}
+</body>
+</html>
