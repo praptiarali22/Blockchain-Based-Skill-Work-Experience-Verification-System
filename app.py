@@ -5,16 +5,26 @@ from web3 import Web3
 from datetime import datetime
 import json
 import os
+import time
 from datetime import datetime
+from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
 # MySQL configuration
 app.config['MYSQL_HOST'] = 'localhost'
 app.config['MYSQL_USER'] = 'root'  # Your MySQL username
-app.config['MYSQL_PASSWORD'] = 'Rashmi@123'  # Your MySQL password
+app.config['MYSQL_PASSWORD'] = 'prapti123'  # Your MySQL password
 app.config['MYSQL_DB'] = 'BlockchainProject'
 mysql = MySQL(app)
 app.secret_key = os.urandom(24)
+
+# Configure upload folder and allowed extensions
+UPLOAD_FOLDER = 'static/uploads'
+ALLOWED_EXTENSIONS = {'pdf', 'doc', 'docx'}
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
+# Make sure upload folder exists
+os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
 # Connect to local Ganache blockchain
 w3 = Web3(Web3.HTTPProvider("http://127.0.0.1:7545"))
@@ -24,7 +34,7 @@ if not w3.is_connected():
     raise Exception("Web3 is not connected to Ganache")
 
 # Your smart contract address deployed from Remix/Ganache
-contract_address = Web3.to_checksum_address("0x99289B09Cc1d9a760F472261676838e4B98A23BA")
+contract_address = Web3.to_checksum_address("0x0589413E1D3e2F7554294398Dc2DB5910b7198DA")
 
 # Load ABI (replace with your actual ABI file path)
 with open("certificate_abi.json") as f:
@@ -37,7 +47,7 @@ contract = w3.eth.contract(address=contract_address, abi=contract_abi)
 hr_account = w3.eth.accounts[0]
 
 # Private key for hr_account (only use this in development!)
-private_key = "0xc6a302112cee7730b17ede3e9a6c4742e36ebcd72a98584d5f35a34f8db31482"
+private_key = "0xe27cb1e1463f5fe22366aef452c06389f05ce709a637bbbc225515cf3d364274"
 
 @app.route("/")
 def index():
@@ -384,15 +394,23 @@ def hr_view_certificate():
 @app.route('/view_jobs')
 def view_jobs():
     cursor = mysql.connection.cursor()
-    cursor.execute("SELECT company, job_title, skills_required, location, job_description, posted_on FROM jobs")
+    cursor.execute("SELECT id, company, job_title, skills_required, location, job_description, posted_on FROM jobs")  # Added id as first column
     jobs = cursor.fetchall()
     cursor.close()
 
     # Format the timestamp
     formatted_jobs = []
     for job in jobs:
-        formatted_posted_on = job[5].strftime('%Y-%m-%d %H:%M')  # You can customize this format
-        formatted_jobs.append((job[0], job[1], job[2], job[3], job[4], formatted_posted_on))
+        formatted_posted_on = job[6].strftime('%Y-%m-%d %H:%M')  # Note index changed to 6
+        formatted_jobs.append({
+            'id': job[0],         # job ID
+            'company': job[1],
+            'job_title': job[2],
+            'skills_required': job[3],
+            'location': job[4],
+            'job_description': job[5],
+            'posted_on': formatted_posted_on
+        })
 
     return render_template("view_jobs.html", jobs=formatted_jobs)
 
@@ -403,6 +421,166 @@ def logout():
     session.clear()
     flash("Logged out successfully.", "info")
     return redirect(url_for('login'))
+
+
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+@app.route('/enroll', methods=['GET', 'POST'])
+def enroll():
+    if 'user_id' not in session or session['user_type'] != 'employee':
+        return redirect(url_for('login'))
+
+    if request.method == 'GET':
+        company = request.args.get('company')
+        job_title = request.args.get('job_title')
+        job_id = request.args.get('job_id', None)  # Get job ID from URL
+        
+        if not job_id:
+            flash('Invalid job selected', 'danger')
+            return redirect(url_for('view_jobs'))
+
+        # Get employee's certificates
+        cursor = mysql.connection.cursor()
+        cursor.execute("""
+            SELECT certificate_id 
+            FROM employee_certificates 
+            WHERE employee_username = %s
+        """, (session['username'],))
+        
+        certificate_ids = [row[0] for row in cursor.fetchall()]
+        certificates = []
+        
+        for cert_id in certificate_ids:
+            try:
+                cert_data = contract.functions.getCertificate(cert_id).call()
+                certificates.append({
+                    'id': cert_id,
+                    'employee_name': cert_data[0],
+                    'company_name': cert_data[2],
+                    'job_role': cert_data[3]
+                })
+            except:
+                continue
+        
+        cursor.close()
+        
+        return render_template('enroll_job.html', 
+                            company=company, 
+                            job_title=job_title,
+                            job_id=job_id,
+                            certificates=certificates)
+
+    if request.method == 'POST':
+        job_id = request.form.get('job_id')
+        certificate_id = request.form.get('certificate_id', None)
+        
+        if not job_id:
+            flash('Job ID is required', 'danger')
+            return redirect(url_for('view_jobs'))
+            
+        # Handle file upload
+        if 'resume' not in request.files:
+            flash('No resume file uploaded', 'danger')
+            return redirect(request.url)
+            
+        file = request.files['resume']
+        
+        if file.filename == '':
+            flash('No selected file', 'danger')
+            return redirect(request.url)
+            
+        if file and allowed_file(file.filename):
+            try:
+                filename = secure_filename(f"{session['user_id']}_{int(time.time())}_{file.filename}")
+                file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+                file.save(file_path)
+                
+                cursor = mysql.connection.cursor()
+                cursor.execute("""
+                    INSERT INTO job_enrollments 
+                    (job_id, employee_id, certificate_id, resume_path, status)
+                    VALUES (%s, %s, %s, %s, 'pending')
+                """, (job_id, session['user_id'], certificate_id, filename))
+                mysql.connection.commit()
+                cursor.close()
+                
+                flash('Job application submitted successfully!', 'success')
+                return redirect(url_for('employee_dashboard'))
+                
+            except Exception as e:
+                flash(f'Error submitting application: {str(e)}', 'danger')
+                return redirect(request.url)
+        else:
+            flash('Allowed file types are pdf, doc, docx', 'danger')
+            return redirect(request.url)
+        
+@app.route('/approve_certificates')
+def approve_certificates():
+    if 'user_id' not in session or session['user_type'] != 'hr':
+        return redirect(url_for('login'))
+
+    try:
+        # Get HR's company
+        cursor = mysql.connection.cursor()
+        cursor.execute("SELECT company FROM hr WHERE id = %s", (session['user_id'],))
+        company = cursor.fetchone()[0]
+        
+        # Get pending enrollments for HR's company
+        cursor.execute("""
+            SELECT je.id, j.job_title, e.name, e.email, 
+                   je.certificate_id, je.resume_path, je.enrolled_at
+            FROM job_enrollments je
+            JOIN jobs j ON je.job_id = j.id
+            JOIN employees e ON je.employee_id = e.id
+            WHERE j.company = %s AND je.status = 'pending'
+        """, (company,))
+        enrollments = cursor.fetchall()
+        cursor.close()
+        
+        return render_template('approve_certificates.html', enrollments=enrollments)
+        
+    except Exception as e:
+        flash(f'Error loading enrollments: {str(e)}', 'danger')
+        return redirect(url_for('hr_dashboard'))
+
+@app.route('/update_enrollment_status', methods=['POST'])
+def update_enrollment_status():
+    if 'user_id' not in session or session['user_type'] != 'hr':
+        return redirect(url_for('login'))
+
+    enrollment_id = request.form['enrollment_id']
+    status = request.form['status']
+    message = request.form.get('message', '')
+    
+    try:
+        cursor = mysql.connection.cursor()
+        
+        # Update enrollment status
+        cursor.execute("""
+            UPDATE job_enrollments 
+            SET status = %s 
+            WHERE id = %s
+        """, (status, enrollment_id))
+        
+        # Add message if provided
+        if message:
+            cursor.execute("""
+                INSERT INTO enrollment_messages 
+                (enrollment_id, hr_id, message)
+                VALUES (%s, %s, %s)
+            """, (enrollment_id, session['user_id'], message))
+            
+        mysql.connection.commit()
+        cursor.close()
+        
+        flash(f'Application {status} successfully!', 'success')
+        return redirect(url_for('approve_certificates'))
+        
+    except Exception as e:
+        flash(f'Error updating status: {str(e)}', 'danger')
+        return redirect(url_for('approve_certificates'))
 
 
 if __name__ == "__main__":

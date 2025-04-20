@@ -4,23 +4,23 @@
     <meta charset="UTF-8">
     <title>Available Jobs</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='view_jobs.css') }}">
-    
 </head>
 <body>
-        <h2>Available Job Listings</h2>
-        
+    <h2>Available Job Listings</h2>
     <main>
         {% if jobs %}
         <div class="job-container">
             {% for job in jobs %}
             <div class="job-card">
-                <h3>{{ job[1] }} at {{ job[0] }}</h3>
-                <p><strong>Skills:</strong> {{ job[2] }}</p>
-                <p><strong>Location:</strong> {{ job[3] }}</p>
-                <p><strong>Description:</strong> {{ job[4] }}</p>
-                <p><strong>Posted On:</strong> {{ job[5] }}</p>
+                <h3>{{ job.job_title }} at {{ job.company }}</h3>
+                <p><strong>Skills:</strong> {{ job.skills_required }}</p>
+                <p><strong>Location:</strong> {{ job.location }}</p>
+                <p><strong>Description:</strong> {{ job.job_description }}</p>
+                <p><strong>Posted On:</strong> {{ job.posted_on }}</p>
                 <div class="job-actions">
-                    <a href="/enroll?company={{ job[0] | urlencode }}&job_title={{ job[1] | urlencode }}" class="button">Enroll</a>
+                    <a href="{{ url_for('enroll', company=job.company, job_title=job.job_title, job_id=job.id) }}" class="btn-enroll">
+                        Enroll Now
+                    </a>
                 </div>
             </div>
             {% endfor %}
@@ -29,8 +29,6 @@
             <p style="text-align: center; font-size: 18px;">No jobs available at the moment.</p>
         {% endif %}
     </main>
-
     <a href="{{ url_for('employee_dashboard') }}" class="button">⬅ Back to Dashboard</a>
-    
 </body>
 </html>

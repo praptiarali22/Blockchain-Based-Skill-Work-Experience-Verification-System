@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Enroll for Job</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='post_job.css') }}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@10.16.7/dist/sweetalert2.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10.16.7/dist/sweetalert2.min.js"></script>
+</head>
+<body>
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <script>
+                $(document).ready(function() {
+                    Swal.fire({
+                        title: "Notification",
+                        text: "{{ messages[0] }}",
+                        icon: "info",
+                        confirmButtonText: "OK"
+                    });
+                });
+            </script>
+        {% endif %}
+    {% endwith %}
+
+    <h2>Enroll for {{ job_title }} at {{ company }}</h2>
+    <form method="POST" enctype="multipart/form-data">
+        <input type="hidden" name="job_id" value="{{ job_id }}">
+        
+        <label>Select Certificate (optional):</label>
+        <select name="certificate_id">
+            <option value="">No certificate</option>
+            {% for cert in certificates %}
+                <option value="{{ cert.id }}">
+                    {{ cert.company_name }} - {{ cert.job_role }}
+                </option>
+            {% endfor %}
+        </select><br><br>
+        
+        <label>Upload Resume (PDF/DOC):</label>
+        <input type="file" name="resume" accept=".pdf,.doc,.docx" required><br><br>
+        
+        <button type="submit">Submit Application</button>
+    </form>
+    
+    <a href="{{ url_for('view_jobs') }}" class="button">Back to Jobs</a>
+</body>
+</html>

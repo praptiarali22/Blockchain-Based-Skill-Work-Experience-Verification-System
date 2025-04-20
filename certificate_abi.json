@@ -21,6 +21,50 @@
 	{
 		"inputs": [
 			{
+				"internalType": "string",
+				"name": "_employeeName",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "_employeeId",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "_companyName",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "_jobRole",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "_skills",
+				"type": "string"
+			},
+			{
+				"internalType": "string",
+				"name": "_performance",
+				"type": "string"
+			}
+		],
+		"name": "issueCertificate",
+		"outputs": [
+			{
+				"internalType": "uint256",
+				"name": "",
+				"type": "uint256"
+			}
+		],
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"inputs": [
+			{
 				"internalType": "uint256",
 				"name": "",
 				"type": "uint256"
@@ -133,50 +177,6 @@
 			}
 		],
 		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "string",
-				"name": "_employeeName",
-				"type": "string"
-			},
-			{
-				"internalType": "string",
-				"name": "_employeeId",
-				"type": "string"
-			},
-			{
-				"internalType": "string",
-				"name": "_companyName",
-				"type": "string"
-			},
-			{
-				"internalType": "string",
-				"name": "_jobRole",
-				"type": "string"
-			},
-			{
-				"internalType": "string",
-				"name": "_skills",
-				"type": "string"
-			},
-			{
-				"internalType": "string",
-				"name": "_performance",
-				"type": "string"
-			}
-		],
-		"name": "issueCertificate",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"stateMutability": "nonpayable",
 		"type": "function"
 	},
 	{
