@@ -33,13 +33,13 @@ h2 {
 }
 
 .button {
-    padding: 12px 30px;
+    padding: 15px 30px;
     background: linear-gradient(145deg, #7c30e2, #a66bff);
     color: white;
     text-decoration: none;
     border-radius: 10px;
     font-weight: 600;
-    font-size: 1.1rem;
+    font-size: 1.25rem;
     transition: transform 0.3s, box-shadow 0.3s;
     box-shadow: 0 4px 12px rgba(106, 13, 173, 0.3);
     text-align: center;
@@ -55,6 +55,7 @@ h2 {
 footer {
     margin-top: auto;
     padding: 20px;
+    margin-bottom: 50px;
 }
 
 footer a {
@@ -64,5 +65,5 @@ footer a {
 }
 
 footer a:hover {
-    text-decoration: underline;
+    text-decoration: none;
 }

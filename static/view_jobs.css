@@ -13,6 +13,7 @@ body {
         h1, h2 {
             margin: 20px 0;
             text-align: center;
+            font-size: 30px;
         }
 
         .job-container {
@@ -21,13 +22,14 @@ body {
             justify-content: center;
             gap: 25px;
             padding: 20px;
+            font-size: 30px;
         }
 
         .job-card {
             background-color: #ffffff;
             border: 1px solid #e9d5ff;
             border-radius: 12px;
-            padding: 20px;
+            padding: 40px;
             width: 320px;
             box-shadow: 0 6px 15px rgba(0,0,0,0.05);
             transition: transform 0.3s ease;
@@ -39,12 +41,12 @@ body {
 
         .job-card h3 {
             margin: 0;
-            font-size: 20px;
+            font-size: 25px;
             color: #6b21a8;
         }
 
         .job-card p {
-            font-size: 15px;
+            font-size: 18px;
             color: #4b5563;
             margin: 6px 0;
         }
@@ -60,7 +62,7 @@ body {
             text-decoration: none;
             border-radius: 10px;
             font-weight: 600;
-            font-size: 1.1rem;
+            font-size: 1.2rem;
             transition: transform 0.3s, box-shadow 0.3s;
             box-shadow: 0 4px 12px rgba(106, 13, 173, 0.3);
             text-align: center;

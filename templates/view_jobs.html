@@ -18,7 +18,7 @@
                 <p><strong>Description:</strong> {{ job.job_description }}</p>
                 <p><strong>Posted On:</strong> {{ job.posted_on }}</p>
                 <div class="job-actions">
-                    <a href="{{ url_for('enroll', company=job.company, job_title=job.job_title, job_id=job.id) }}" class="btn-enroll">
+                    <a href="{{ url_for('enroll', company=job.company, job_title=job.job_title, job_id=job.id) }}" class="button">
                         Enroll Now
                     </a>
                 </div>

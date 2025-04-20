@@ -430,6 +430,7 @@ def allowed_file(filename):
 @app.route('/enroll', methods=['GET', 'POST'])
 def enroll():
     if 'user_id' not in session or session['user_type'] != 'employee':
+        print("User not logged in or not an employee")
         return redirect(url_for('login'))
 
     if request.method == 'GET':
@@ -437,8 +438,11 @@ def enroll():
         job_title = request.args.get('job_title')
         job_id = request.args.get('job_id', None)  # Get job ID from URL
         
+        print(f"GET Request: company={company}, job_title={job_title}, job_id={job_id}")
+
         if not job_id:
             flash('Invalid job selected', 'danger')
+            print("Job ID is missing")
             return redirect(url_for('view_jobs'))
 
         # Get employee's certificates
@@ -452,6 +456,8 @@ def enroll():
         certificate_ids = [row[0] for row in cursor.fetchall()]
         certificates = []
         
+        print(f"Fetched certificate IDs: {certificate_ids}")
+
         for cert_id in certificate_ids:
             try:
                 cert_data = contract.functions.getCertificate(cert_id).call()
@@ -461,7 +467,9 @@ def enroll():
                     'company_name': cert_data[2],
                     'job_role': cert_data[3]
                 })
-            except:
+                print(f"Added certificate: {cert_data}")
+            except Exception as e:
+                print(f"Error fetching certificate data for {cert_id}: {str(e)}")
                 continue
         
         cursor.close()
@@ -476,26 +484,33 @@ def enroll():
         job_id = request.form.get('job_id')
         certificate_id = request.form.get('certificate_id', None)
         
+        print(f"POST Request: job_id={job_id}, certificate_id={certificate_id}")
+
         if not job_id:
             flash('Job ID is required', 'danger')
+            print("No job ID provided")
             return redirect(url_for('view_jobs'))
-            
+        
         # Handle file upload
         if 'resume' not in request.files:
             flash('No resume file uploaded', 'danger')
+            print("No resume file uploaded")
             return redirect(request.url)
             
         file = request.files['resume']
         
         if file.filename == '':
             flash('No selected file', 'danger')
+            print("No selected file")
             return redirect(request.url)
-            
+        
         if file and allowed_file(file.filename):
             try:
-                filename = secure_filename(f"{session['user_id']}_{int(time.time())}_{file.filename}")
+                filename = secure_filename(f"{session['user_id']}{int(time.time())}{file.filename}")
                 file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
                 file.save(file_path)
+                
+                print(f"Resume file saved at: {file_path}")
                 
                 cursor = mysql.connection.cursor()
                 cursor.execute("""
@@ -507,27 +522,48 @@ def enroll():
                 cursor.close()
                 
                 flash('Job application submitted successfully!', 'success')
+                print("Job application submitted successfully")
                 return redirect(url_for('employee_dashboard'))
                 
             except Exception as e:
                 flash(f'Error submitting application: {str(e)}', 'danger')
+                print(f"Error submitting application: {str(e)}")
                 return redirect(request.url)
         else:
             flash('Allowed file types are pdf, doc, docx', 'danger')
+            print("Invalid file type")
             return redirect(request.url)
         
+from datetime import datetime
+
+@app.template_filter('datetimeformat')
+def datetimeformat(value, format='%B %d, %Y %I:%M %p'):
+    if isinstance(value, datetime):
+        return value.strftime(format)
+    try:
+        # If value is a timestamp or string, try to parse it into a datetime object
+        return datetime.utcfromtimestamp(int(value)).strftime(format)
+    except (ValueError, TypeError):
+        return value  # If it can't be converted, return the original value
+
 @app.route('/approve_certificates')
 def approve_certificates():
     if 'user_id' not in session or session['user_type'] != 'hr':
+        print("Access denied: not logged in or not HR.")
         return redirect(url_for('login'))
 
     try:
-        # Get HR's company
         cursor = mysql.connection.cursor()
         cursor.execute("SELECT company FROM hr WHERE id = %s", (session['user_id'],))
-        company = cursor.fetchone()[0]
-        
-        # Get pending enrollments for HR's company
+        company_row = cursor.fetchone()
+        if not company_row:
+            print("HR company not found.")
+            flash("Unable to find your company.", "danger")
+            return redirect(url_for('hr_dashboard'))
+
+        company = company_row[0]
+        print(f"HR's company: {company}")
+
         cursor.execute("""
             SELECT je.id, j.job_title, e.name, e.email, 
                    je.certificate_id, je.resume_path, je.enrolled_at
@@ -538,10 +574,40 @@ def approve_certificates():
         """, (company,))
         enrollments = cursor.fetchall()
         cursor.close()
-        
-        return render_template('approve_certificates.html', enrollments=enrollments)
-        
+
+        enriched_enrollments = []
+
+        for row in enrollments:
+            try:
+                cert_id = row[4]
+                cert_data = contract.functions.getCertificate(cert_id).call()
+
+                enriched_enrollments.append({
+                    'id': row[0],
+                    'job_title': row[1],
+                    'employee_name': row[2],
+                    'email': row[3],
+                    'certificate_id': cert_id,
+                    'resume_path': row[5],
+                    'enrolled_at': row[6],
+                    'certificate_details': {
+                        'employee_name': cert_data[0],
+                        'employee_id': cert_data[1],
+                        'company_name': cert_data[2],
+                        'job_role': cert_data[3],
+                        'skills': cert_data[4],
+                        'performance': cert_data[5],
+                        'date_issued': cert_data[6]
+                    }
+                })
+            except Exception as e:
+                print(f"Error fetching certificate {cert_id}: {str(e)}")
+                continue
+
+        return render_template('approve_certificates.html', enrollments=enriched_enrollments)
+
     except Exception as e:
+        print(f"Exception occurred: {str(e)}")
         flash(f'Error loading enrollments: {str(e)}', 'danger')
         return redirect(url_for('hr_dashboard'))
 

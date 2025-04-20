@@ -14,7 +14,7 @@ body {
 /* Header Styles */
 h1 {
     font-size: 2.5rem;
-    margin-top: 30px; /* Reduced gap */
+    margin-top: 40px;
     color: #6a0dad;
     text-align: center;
 }
@@ -31,34 +31,69 @@ h2 {
 form {
     background-color: #fff;
     border-radius: 10px;
-    padding: 20px 50px;; /* Reduced padding */
+    padding: 25px;
     box-shadow: 0 8px 20px rgba(106, 13, 173, 0.3);
     width: 100%;
     max-width: 400px;
-    margin-top: 10px; /* Reduced margin-top */
-    margin-bottom: 20px;
+    margin-top: 20px;
     display: flex;
     flex-direction: column;
-    gap: 4px; /* Reduced gap */
+    gap: 0px;
 }
 
-/* File Input Styling */
-input[type="text"] {
-    padding: 8px; /* Reduced padding */
+/* Select Dropdown Styling */
+select {
+    width: 100%;
+    padding: 12px;
     font-size: 1rem;
-    border-radius: 10px;
+    border-radius: 8px;
     border: 1px solid #d3cce3;
     background-color: #fafafa;
     color: #333;
     transition: background-color 0.3s ease, border-color 0.3s ease;
-    margin-bottom: 3px; /* Reduced margin-bottom */
+    margin-bottom: 5px;
+    box-sizing: border-box;
+}
+
+select:hover {
+    border-color: #a66bff;
+    background-color: #f9f9f9;
+}
+
+select:focus {
+    outline: none;
+    border-color: #6a0dad;
+    background-color: #f0f0f0;
+}
+
+/* File Input Styling */
+input[type="file"] {
+    padding: 10px;
+    font-size: 1rem;
+    border-radius: 8px;
+    border: 1px solid #d3cce3;
+    background-color: #fafafa;
+    color: #333;
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+    margin-bottom: 5px;
     width: 100%;
     box-sizing: border-box;
 }
 
+input[type="file"]:hover {
+    border-color: #a66bff;
+    background-color: #f9f9f9;
+}
+
+input[type="file"]:focus {
+    outline: none;
+    border-color: #6a0dad;
+    background-color: #f0f0f0;
+}
+
 /* Input and Button Styles */
 input, textarea, button {
-    padding: 4px; /* Reduced padding */
+    padding: 5px;
     border-radius: 8px;
     border: 1px solid #ddd;
     font-size: 1rem;
@@ -70,16 +105,16 @@ input, textarea {
 
 button {
     background: linear-gradient(145deg, #7c30e2, #a66bff);
-    padding: 14px 18px; /* Reduced padding */
+    padding: 16px 20px;
     color: white;
     font-weight: 600;
     border: none;
     cursor: pointer;
     transition: transform 0.3s, box-shadow 0.3s;
     box-shadow: 0 4px 12px rgba(106, 13, 173, 0.3);
-    margin-top: 10px; /* Reduced margin-top */
-    font-size: 1.1rem; /* Reduced font size */
-    width: 280px; /* Reduced width */
+    margin-top: 15px;
+    font-size: 1.2rem;
+    width: 300px;
     align-self: center;
 }
 
@@ -93,17 +128,17 @@ button:hover {
 p {
     font-size: 0.95rem;
     color: #4b0082;
-    margin: 8px 0; /* Reduced margin */
+    margin: 10px 0;
     text-align: center;
 }
 
 p.error {
     color: #ff4d4d;
     background-color: #ffe6e6;
-    padding: 8px; /* Reduced padding */
+    padding: 10px;
     border-radius: 8px;
     font-weight: bold;
-    margin-top: 12px; /* Reduced margin-top */
+    margin-top: 15px;
     box-shadow: 0 4px 8px rgba(255, 77, 77, 0.3);
 }
 
@@ -114,10 +149,10 @@ a.button {
     background: linear-gradient(145deg, #7c30e2, #a66bff);
     color: white;
     font-weight: 600;
-    padding: 10px 16px; /* Reduced padding */
+    padding: 12px 20px;
     border-radius: 8px;
     text-decoration: none;
-    margin-top: 12px; /* Reduced margin-top */
+    margin-top: 20px;
     font-size: 1.1rem;
     box-shadow: 0 4px 12px rgba(106, 13, 173, 0.3);
     transition: transform 0.3s, box-shadow 0.3s;

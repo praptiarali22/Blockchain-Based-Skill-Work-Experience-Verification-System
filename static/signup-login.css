@@ -13,7 +13,7 @@ body {
 
 /* Header Styles */
 h1 {
-    font-size: 2.5rem;
+    font-size: 2.7rem;
     margin-top: 40px;
     color: #6a0dad;
     text-align: center;
@@ -23,11 +23,12 @@ h1 {
 form {
     background-color: #fff;
     border-radius: 10px;
-    padding: 30px;
+    padding:40px 55px;
     box-shadow: 0 8px 20px rgba(106, 13, 173, 0.3);
     width: 100%;
     max-width: 400px;
     margin-top: 40px;
+    margin-bottom: 25px;
     display: flex;
     flex-direction: column;
     gap: 5px;
@@ -38,7 +39,7 @@ input, select, button {
     padding: 12px;
     border-radius: 8px;
     border: 1px solid #ddd;
-    font-size: 1rem;
+    font-size: 1.2rem;
 }
 
 input, select {
@@ -54,7 +55,7 @@ button {
     transition: transform 0.3s, box-shadow 0.3s;
     box-shadow: 0 4px 12px rgba(106, 13, 173, 0.3);
     margin-top: 15px;
-    font-size: 1.1rem;
+    font-size: 1.2rem;
 }
 
 button:hover {
@@ -81,7 +82,7 @@ footer a:hover {
 
 /* Additional Links and Error Message Styles */
 p {
-    font-size: 0.95rem;
+    font-size: 1.1rem;
     color: #4b0082;
     margin: 10px 0;
     text-align: center;
